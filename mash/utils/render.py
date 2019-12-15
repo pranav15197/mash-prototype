@@ -7,4 +7,4 @@ def add_text_to_video(file_path, text):
     text_clip.duration = clip.duration
     final_clip = CompositeVideoClip([clip, text_clip])
     final_clip.duration = clip.duration
-    final_clip.write_videofile("videos/final_video.mp4")
+    final_clip.write_videofile("media/final_video.mp4")
