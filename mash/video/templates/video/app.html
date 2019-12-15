@@ -1,0 +1,60 @@
+<div id="app">
+<input @change="onFileChange" type="file" id="file" ref="file"/><br>
+<button @click="uploadFile">Upload Raw File</button><br>
+<input v-model="text"/>
+<button @click="insertText">Add text to video</button><br>
+[[message]]
+<a v-if="rendered_video_path" :href="rendered_video_path">Rendered Video</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" integrity="sha256-XmdRbTre/3RulhYk/cOBUMpYlaAp2Rpo/s556u0OIKk=" crossorigin="anonymous"></script>
+<script>
+var app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#app',
+    data: {
+        image: "",
+        text: "",
+        raw_video_id: 5,
+        rendered_video_path: "",
+        message: 'Hello Vue!',
+    },
+    methods: {
+        onFileChange(e) {
+            this.file = this.$refs.file.files[0];
+        },
+        uploadFile(){
+            var self = this
+            let formData = new FormData();
+            formData.append('video', this.file);
+            axios.post( '/video/',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            ).then(function(res){
+                self.raw_video_id = res.data.id;
+                console.log('SUCCESS!!');
+            })
+            .catch(function(err){
+                console.log('FAILURE!!');
+            });
+        },
+        insertText(){
+            var self = this
+            axios.post( '/video/insert_text/', {
+                "raw_video_id": self.raw_video_id,
+                "text": self.text
+            }).then(function(res){
+                self.rendered_video_path = res.data.video;
+                console.log('SUCCESS!!');
+            })
+            .catch(function(err){
+                console.log('FAILURE!!');
+            });
+        }
+    }
+});
+</script>

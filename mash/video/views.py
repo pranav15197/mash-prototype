@@ -1,3 +1,4 @@
+from django.views.generic import TemplateView
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -33,3 +34,7 @@ class InsertVideoTextView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AppView(TemplateView):
+    template_name = "video/app.html"
