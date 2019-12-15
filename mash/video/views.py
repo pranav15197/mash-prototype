@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from utils.render import add_text_to_video
-from .services import get_video_path_by_id
-from .serializers import RawVideoSerializer, InsertTextInputSerializer
+from .services import get_video_by_id, save_rendered_video
+from .serializers import RawVideoSerializer, InsertTextInputSerializer, RenderedVideoSerializer
 
 
 class RawVideoUploadView(APIView):
@@ -26,8 +26,10 @@ class InsertVideoTextView(APIView):
         serializer = InsertTextInputSerializer(data=request.data)
         if serializer.is_valid():
             video_id, text = [serializer.data[k] for k in ['raw_video_id', 'text']]
-            file_path = get_video_path_by_id(video_id)
-            add_text_to_video(file_path, text)
+            raw_video = get_video_by_id(video_id)
+            rendered_file_path = add_text_to_video(raw_video, text)
+            rendered_video = save_rendered_video(raw_video, rendered_file_path)
+            serializer = RenderedVideoSerializer(rendered_video)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
