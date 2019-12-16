@@ -26,9 +26,9 @@ class InsertVideoTextView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = InsertTextInputSerializer(data=request.data)
         if serializer.is_valid():
-            video_id, text = [serializer.data[k] for k in ['raw_video_id', 'text']]
+            video_id, text, position = [serializer.data[k] for k in ['raw_video_id', 'text', 'position']]
             raw_video = get_video_by_id(video_id)
-            rendered_file_path = add_text_to_video(raw_video, text)
+            rendered_file_path = add_text_to_video(raw_video, text, position)
             rendered_video = save_rendered_video(raw_video, rendered_file_path)
             serializer = RenderedVideoSerializer(rendered_video)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -3,10 +3,10 @@ import os
 from moviepy.editor import TextClip, CompositeVideoClip, VideoFileClip
 
 
-def add_text_to_video(video, text):
+def add_text_to_video(video, text, pos="center"):
     datetime.datetime.utctimetuple
     file_path = video.video.path
-    text_clip = TextClip(text, color='white', font="Amiri-Bold", fontsize=100).set_pos("center")
+    text_clip = TextClip(text, color='white', font="Amiri-Bold", fontsize=100).set_pos(pos.split("-"))
     clip = VideoFileClip(file_path)
     text_clip.duration = clip.duration
     final_clip = CompositeVideoClip([clip, text_clip])

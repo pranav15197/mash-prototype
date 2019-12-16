@@ -17,3 +17,4 @@ class RenderedVideoSerializer(serializers.ModelSerializer):
 class InsertTextInputSerializer(serializers.Serializer):
     raw_video_id = serializers.IntegerField()
     text = serializers.CharField()
+    position = serializers.CharField()
